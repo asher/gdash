@@ -8,6 +8,7 @@
         <script src="<%= @prefix %>/js/bootstrap-scrollspy.js"></script>
         <script src="<%= @prefix %>/js/bootstrap-dropdown.js"></script>
         <script src="<%= @prefix %>/js/bootstrap-popover.js"></script>
+        <script src="<%= @prefix %>/js/deploy-option.js"></script>
         <title><%= @dash_title %></title>
         <meta http-equiv="refresh" content="<%= @refresh_rate %>">
     </head>
@@ -29,6 +30,12 @@
                             </li>
                         <% end %>
                         </ul>
+                        <% if @deploy_addon %>
+                           <div class="check" style="padding-top: 6px; color:#ccc;">
+                               <form><input id="deploy" type="checkbox" name="deploy" value="foo"
+                                   <% if @add_deploy != "" %>checked<% end %> /> Show Code Deploys</form>
+                           </div>
+                        <% end %>
                         <ul class="nav secondary-nav">
                             <li><a href="<%= @graphite_base %>">Data Browser</a></li>
                         </ul>

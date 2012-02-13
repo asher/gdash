@@ -31,6 +31,9 @@ class GDash
             # Dashboard title
             @dash_title = options.delete(:title) || "Graphite Dashboard"
 
+            # target to add code deploys
+            @deploy_addon = options.delete(:deploy_addon) || nil
+
             @top_level = Hash.new
             Dir.entries(@graph_templates).each do |category|
               if File.directory?("#{@graph_templates}/#{category}")
@@ -59,7 +62,7 @@ class GDash
             erb :index
         end
 
-	get '/:category/:dash/full/?*' do
+        get '/:category/:dash/full/?*' do
             params["splat"] = params["splat"].first.split("/")
 
             params["columns"] = params["splat"][0].to_i || @graph_columns
@@ -80,9 +83,12 @@ class GDash
             end
 
             erb :full_size_dashboard, :layout => false
-	end
+        end
 
-        get '/:category/:dash/' do
+        get '/:category/:dash/?*' do
+            if params["splat"].include? 'deploys'
+                @add_deploy = @deploy_addon << '&' unless @deploy_addon == nil
+            end
             if @top_level["#{params[:category]}"].list.include?(params[:dash])
                 @dashboard = @top_level[@params[:category]].dashboard(params[:dash])
             else
